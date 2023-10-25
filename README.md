@@ -234,3 +234,16 @@ MPLBACKEND='agg' pytest -vsx tests/
 ## Acknowledgement
 
 This repo is the fork of [mpitid/pylabelme](https://github.com/mpitid/pylabelme).
+
+## onnxruntime-gpu
+```shell
+conda create --name labelme python=3.10
+conda activate labelme
+
+conda install cudatoolkit=11.8 -c pytorch
+conda install cudnn=8.8.0.121 -c conda-forge
+
+git clone https://github.com/markrenChina/labelme-cuda.git
+cd labelme-cuda
+pip install -e .
+```

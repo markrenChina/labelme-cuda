@@ -16,8 +16,8 @@ class SegmentAnythingModel:
 
         self._image_size = 1024
 
-        self._encoder_session = onnxruntime.InferenceSession(encoder_path)
-        self._decoder_session = onnxruntime.InferenceSession(decoder_path)
+        self._encoder_session = onnxruntime.InferenceSession(encoder_path, providers=['CUDAExecutionProvider'])
+        self._decoder_session = onnxruntime.InferenceSession(decoder_path, providers=['CUDAExecutionProvider'])
 
         self._lock = threading.Lock()
         self._image_embedding_cache = collections.OrderedDict()
@@ -63,7 +63,7 @@ class SegmentAnythingModel:
         image_embedding = self._get_image_embedding()
         polygon = _compute_polygon_from_points(
             image_size=self._image_size,
-            decoder_session=self._decoder_session,
+            decoder_session=self._decoder_session,  # 编码器模型
             image=self._image,
             image_embedding=image_embedding,
             points=points,
@@ -128,24 +128,24 @@ def _get_contour_length(contour):
 
 
 def _compute_polygon_from_points(
-    image_size, decoder_session, image, image_embedding, points, point_labels
+        image_size, decoder_session, image, image_embedding, points, point_labels
 ):
     input_point = np.array(points, dtype=np.float32)
     input_label = np.array(point_labels, dtype=np.int32)
 
     onnx_coord = np.concatenate([input_point, np.array([[0.0, 0.0]])], axis=0)[
-        None, :, :
-    ]
+                 None, :, :
+                 ]
     onnx_label = np.concatenate([input_label, np.array([-1])], axis=0)[
-        None, :
-    ].astype(np.float32)
+                 None, :
+                 ].astype(np.float32)
 
     scale, new_height, new_width = _compute_scale_to_resize_image(
         image_size=image_size, image=image
     )
     onnx_coord = (
-        onnx_coord.astype(float)
-        * (new_width / image.shape[1], new_height / image.shape[0])
+            onnx_coord.astype(float)
+            * (new_width / image.shape[1], new_height / image.shape[0])
     ).astype(np.float32)
 
     onnx_mask_input = np.zeros((1, 1, 256, 256), dtype=np.float32)
