@@ -761,10 +761,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self._selectAiModelComboBox.setEnabled(False)
         self._selectAiModelComboBox.currentIndexChanged.connect(
             lambda: self.canvas.initializeAiModel(
-                name=self._selectAiModelComboBox.currentText()
+                name=self._selectAiModelComboBox.currentText(), use_cuda=self._config["cuda"]
             )
         )
-        selectAiModelLabel = QtWidgets.QLabel(self.tr("AI Model"))
+        selectAiModelLabel = QtWidgets.QLabel(self.tr("-AI Model-"))
         selectAiModelLabel.setAlignment(QtCore.Qt.AlignCenter)
         selectAiModelLabel.setFont(QtGui.QFont(None, 10))
         selectAiModel.defaultWidget().layout().addWidget(selectAiModelLabel)
@@ -1069,7 +1069,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.actions.createLineStripMode.setEnabled(True)
                 self.actions.createAiPolygonMode.setEnabled(False)
                 self.canvas.initializeAiModel(
-                    name=self._selectAiModelComboBox.currentText()
+                    name=self._selectAiModelComboBox.currentText(), use_cuda=self._config["cuda"]
                 )
                 self._selectAiModelComboBox.setEnabled(True)
             else:

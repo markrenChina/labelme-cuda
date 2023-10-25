@@ -241,7 +241,7 @@ conda create --name labelme python=3.10
 conda activate labelme
 
 conda install cudatoolkit=11.8 -c pytorch
-conda install cudnn=8.8.0.121 -c conda-forge
+conda install cudnn=8.8.0.121 -c conda-forge # windows
 
 git clone https://github.com/markrenChina/labelme-cuda.git
 cd labelme-cuda

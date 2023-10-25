@@ -11,13 +11,17 @@ from ...logger import logger
 
 
 class SegmentAnythingModel:
-    def __init__(self, name, encoder_path, decoder_path):
+    def __init__(self, name, encoder_path, decoder_path, use_cuda: bool):
         self.name = name
 
         self._image_size = 1024
 
-        self._encoder_session = onnxruntime.InferenceSession(encoder_path, providers=['CUDAExecutionProvider'])
-        self._decoder_session = onnxruntime.InferenceSession(decoder_path, providers=['CUDAExecutionProvider'])
+        if use_cuda:
+            self._encoder_session = onnxruntime.InferenceSession(encoder_path, providers=['CUDAExecutionProvider'])
+            self._decoder_session = onnxruntime.InferenceSession(decoder_path, providers=['CUDAExecutionProvider'])
+        else:
+            self._encoder_session = onnxruntime.InferenceSession(encoder_path, providers=['CPUExecutionProvider'])
+            self._decoder_session = onnxruntime.InferenceSession(decoder_path, providers=['CPUExecutionProvider'])
 
         self._lock = threading.Lock()
         self._image_embedding_cache = collections.OrderedDict()
