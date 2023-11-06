@@ -17,11 +17,15 @@ class SegmentAnythingModel:
         self._image_size = 1024
 
         if use_cuda:
+            # ImageEncoderViT
             self._encoder_session = onnxruntime.InferenceSession(encoder_path, providers=['CUDAExecutionProvider'])
+            # MaskDecoder
             self._decoder_session = onnxruntime.InferenceSession(decoder_path, providers=['CUDAExecutionProvider'])
         else:
             self._encoder_session = onnxruntime.InferenceSession(encoder_path, providers=['CPUExecutionProvider'])
             self._decoder_session = onnxruntime.InferenceSession(decoder_path, providers=['CPUExecutionProvider'])
+
+        self._use_cuda = use_cuda
 
         self._lock = threading.Lock()
         self._image_embedding_cache = collections.OrderedDict()
@@ -121,7 +125,6 @@ def _compute_image_embedding(image_size, encoder_session, image):
 
     output = encoder_session.run(output_names=None, input_feed={"x": x})
     image_embedding = output[0]
-
     return image_embedding
 
 

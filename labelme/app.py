@@ -768,7 +768,6 @@ class MainWindow(QtWidgets.QMainWindow):
         selectAiModelLabel.setAlignment(QtCore.Qt.AlignCenter)
         selectAiModelLabel.setFont(QtGui.QFont(None, 10))
         selectAiModel.defaultWidget().layout().addWidget(selectAiModelLabel)
-
         self.tools = self.toolbar("Tools")
         self.actions.tool = (
             open_,
@@ -1246,9 +1245,9 @@ class MainWindow(QtWidgets.QMainWindow):
             label_id += self._config["shift_auto_shape_color"]
             return LABEL_COLORMAP[label_id % len(LABEL_COLORMAP)]
         elif (
-            self._config["shape_color"] == "manual"
-            and self._config["label_colors"]
-            and label in self._config["label_colors"]
+                self._config["shape_color"] == "manual"
+                and self._config["label_colors"]
+                and label in self._config["label_colors"]
         ):
             return self._config["label_colors"][label]
         elif self._config["default_shape_color"]:
@@ -1543,7 +1542,7 @@ class MainWindow(QtWidgets.QMainWindow):
         """Load the specified file, or the last opened file if None."""
         # changing fileListWidget loads file
         if filename in self.imageList and (
-            self.fileListWidget.currentRow() != self.imageList.index(filename)
+                self.fileListWidget.currentRow() != self.imageList.index(filename)
         ):
             self.fileListWidget.setCurrentRow(self.imageList.index(filename))
             self.fileListWidget.repaint()
@@ -1569,7 +1568,7 @@ class MainWindow(QtWidgets.QMainWindow):
             label_file_without_path = osp.basename(label_file)
             label_file = osp.join(self.output_dir, label_file_without_path)
         if QtCore.QFile.exists(label_file) and LabelFile.is_label_file(
-            label_file
+                label_file
         ):
             try:
                 self.labelFile = LabelFile(label_file)
@@ -1674,9 +1673,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def resizeEvent(self, event):
         if (
-            self.canvas
-            and not self.image.isNull()
-            and self.zoomMode != self.MANUAL_ZOOM
+                self.canvas
+                and not self.image.isNull()
+                and self.zoomMode != self.MANUAL_ZOOM
         ):
             self.adjustScale()
         super(MainWindow, self).resizeEvent(event)
@@ -1755,7 +1754,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def openPrevImg(self, _value=False):
         keep_prev = self._config["keep_prev"]
         if QtWidgets.QApplication.keyboardModifiers() == (
-            Qt.ControlModifier | Qt.ShiftModifier
+                Qt.ControlModifier | Qt.ShiftModifier
         ):
             self._config["keep_prev"] = True
 
@@ -1779,7 +1778,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def openNextImg(self, _value=False, load=True):
         keep_prev = self._config["keep_prev"]
         if QtWidgets.QApplication.keyboardModifiers() == (
-            Qt.ControlModifier | Qt.ShiftModifier
+                Qt.ControlModifier | Qt.ShiftModifier
         ):
             self._config["keep_prev"] = True
 
@@ -2025,7 +2024,7 @@ class MainWindow(QtWidgets.QMainWindow):
             "proceed anyway?"
         ).format(len(self.canvas.selectedShapes))
         if yes == QtWidgets.QMessageBox.warning(
-            self, self.tr("Attention"), msg, yes | no, yes
+                self, self.tr("Attention"), msg, yes | no, yes
         ):
             self.remLabels(self.canvas.deleteSelected())
             self.setDirty()
@@ -2084,7 +2083,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.filename = None
         for file in imageFiles:
             if file in self.imageList or not file.lower().endswith(
-                tuple(extensions)
+                    tuple(extensions)
             ):
                 continue
             label_file = osp.splitext(file)[0] + ".json"
@@ -2094,7 +2093,7 @@ class MainWindow(QtWidgets.QMainWindow):
             item = QtWidgets.QListWidgetItem(file)
             item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
             if QtCore.QFile.exists(label_file) and LabelFile.is_label_file(
-                label_file
+                    label_file
             ):
                 item.setCheckState(Qt.Checked)
             else:
@@ -2127,7 +2126,7 @@ class MainWindow(QtWidgets.QMainWindow):
             item = QtWidgets.QListWidgetItem(filename)
             item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
             if QtCore.QFile.exists(label_file) and LabelFile.is_label_file(
-                label_file
+                    label_file
             ):
                 item.setCheckState(Qt.Checked)
             else:

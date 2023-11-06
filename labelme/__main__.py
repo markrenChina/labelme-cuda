@@ -110,9 +110,8 @@ def main():
 
     parser.add_argument(
         "--cuda",
-        type=bool,
         help="use cuda run AI model",
-        default=False
+        action="store_true",
     )
     args = parser.parse_args()
 
